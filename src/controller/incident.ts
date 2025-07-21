@@ -1,5 +1,5 @@
 const SLACK_TOKEN = process.env.SLACK_BOT_TOKEN!;
-const SLACK_CHANNEL = process.env.SLACK_CHANNEL_ID!;
+const SLACK_CHANNEL = process.env.SLACK_NOTICECHANNEL_ID!;
 
 export async function showIncidentModal(trigger_id: string) {
   const modal = {
@@ -83,18 +83,15 @@ export async function showIncidentModal(trigger_id: string) {
 export async function postIncidentMessage(payload: any) {
   const values = payload.view.state.values;
   const userId = payload.user.id;
-  const username = payload.user.username;
-
-  const userInfo = await fetch(`https://slack.com/api/users.info?user=${userId}`, {
-    headers: {
-      Authorization: `Bearer ${process.env.SLACK_BOT_TOKEN}`,
-    },
-  }).then(res => res.json());
-
-  console.log(userInfo)
-
-
-  const displayName = userInfo?.user?.profile?.display_name || userInfo?.user?.real_name || username;
+  // const username = payload.user.username;
+  //
+  // const userInfo = await fetch(`https://slack.com/api/users.info?user=${userId}`, {
+  //   headers: {
+  //     Authorization: `Bearer ${process.env.SLACK_BOT_TOKEN}`,
+  //   },
+  // }).then(res => res.json());
+  //
+  // const displayName = userInfo?.user?.profile?.display_name || userInfo?.user?.real_name || username;
 
   const tier = values.tier_block.tier_select.selected_option.text.text;
   const service = values.service_block.service_select.selected_option.text.text;
@@ -103,13 +100,14 @@ export async function postIncidentMessage(payload: any) {
   const description = values.desc_block.desc_input.value;
 
   const text = `🚨 *장애 선언*
-• *등록자*: @${displayName}
+• *등록자*: <@${userId}>
 • *등급*: ${tier}
 • *서비스*: ${service}
 • *발생 일시*: ${date} ${time}
 • *내용*
-  ${description}
-
+\`\`\`
+${description}
+\`\`\`
 <!channel>
 `;
 
