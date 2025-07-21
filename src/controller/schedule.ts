@@ -1,4 +1,4 @@
-import {getDateRange} from "../util/date";
+import { getDateRange } from '../util/date';
 
 const SLACK_TOKEN = process.env.SLACK_BOT_TOKEN!;
 const SLACK_CHANNEL = process.env.SLACK_SCHEDULECHANNEL_ID!;
@@ -96,7 +96,7 @@ export async function postScheduleMessage(payload: any) {
     label: 'schedule',
     type,
     dateText,
-    dates: getDateRange(startDate, endDate|startDate),
+    dates: getDateRange(startDate, endDate),
   });
 
 
