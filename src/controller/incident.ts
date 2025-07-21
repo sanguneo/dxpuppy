@@ -83,6 +83,7 @@ export async function showIncidentModal(trigger_id: string) {
 export async function postIncidentMessage(payload: any) {
   const values = payload.view.state.values;
   const userId = payload.user.id;
+  const username = payload.user.username;
 
   const userInfo = await fetch(`https://slack.com/api/users.info?user=${userId}`, {
     headers: {
@@ -90,7 +91,10 @@ export async function postIncidentMessage(payload: any) {
     },
   }).then(res => res.json());
 
-  const displayName = userInfo.user.profile.display_name || userInfo.user.real_name;
+  console.log(userInfo)
+
+
+  const displayName = userInfo?.user?.profile?.display_name || userInfo?.user?.real_name || username;
 
   const tier = values.tier_block.tier_select.selected_option.text.text;
   const service = values.service_block.service_select.selected_option.text.text;
