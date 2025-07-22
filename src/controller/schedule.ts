@@ -1,3 +1,7 @@
+import { db } from '../db/db';
+import { v4 as uuidv4 } from 'uuid';
+
+import { schedules } from '../db/schema';
 import { getDateRange } from '../util/date';
 
 const SLACK_TOKEN = process.env.SLACK_BOT_TOKEN!;
@@ -74,31 +78,24 @@ export async function postScheduleMessage(payload: any) {
   const endDate = state.end_block?.end_date?.selected_date || startDate;
   const type = state.type_block.schedule_type.selected_option.value;
 
-  // const userInfo = await fetch(`https://slack.com/api/users.info?user=${userId}`, {
-  //   headers: {
-  //     Authorization: `Bearer ${process.env.SLACK_BOT_TOKEN}`,
-  //   },
-  // }).then(res => res.json());
-  //
-  // const displayName = userInfo?.user?.profile?.display_name || userInfo?.user?.real_name || username;
-
-// 날짜 포맷
+  // 날짜 포맷
   const dateText =
     startDate === endDate ? startDate : `${startDate} ~ ${endDate}`;
 
-// 메시지 구성
+  // 메시지 구성
   const text = `📅 *일정 등록*
 • 등록자: <@${userId}>
 • 일정: ${dateText}
 • 종류: ${type}`;
 
-  console.log({
-    label: 'schedule',
+  const rows = getDateRange(startDate, endDate).map((date) => ({
+    id: uuidv4(),
+    userId,
+    date,
     type,
-    dateText,
-    dates: getDateRange(startDate, endDate),
-  });
+  }));
 
+  await db.insert(schedules).values(rows);
 
   await fetch('https://slack.com/api/chat.postMessage', {
     method: 'POST',
