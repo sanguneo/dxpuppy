@@ -8,27 +8,27 @@ import { schedules } from '../db/schema';
 const SLACK_TOKEN = process.env.SLACK_BOT_TOKEN!;
 const SLACK_CHANNEL = process.env.SLACK_SCHEDULECHANNEL_ID!;
 
-const TYPE_ORDER = ['휴가', '병가', '오전반차', '오후반차', '외근', '출장'];
+const SCHEDULE_TYPES = [
+  { type: '휴가', emoji: '🌴' },
+  { type: '병가', emoji: '🤒' },
+  { type: '오전반차', emoji: '🌅' },
+  { type: '오후반차', emoji: '🌇' },
+  { type: '외근', emoji: '🚗' },
+  { type: '출장', emoji: '✈️' }
+];
 
-function formatScheduleMessage(date: string, grouped: Record<string, string[]>) {
-  const lines: string[] = [`📅 *${date} 일정 공유*\n`];
 
-  for (const type of TYPE_ORDER) {
-    const names = grouped[type] || [];
+function buildScheduleText(date: string, grouped: Record<string, string[]>): string {
+  const lines = [`📅 *${date} 일정 공유*`];
 
-    lines.push(`• *${type}*`);
-    if (names.length > 0) {
-      for (const name of names) {
-        lines.push(`- ${name}`);
-      }
-    } else {
-      lines.push(`- 없음`);
-    }
-    lines.push(''); // 빈 줄로 분리
+  for (const { type, emoji } of SCHEDULE_TYPES) {
+    const names = grouped[type]?.length ? grouped[type].join(', ') : '-';
+    lines.push(`${emoji} *${type}*: ${names}`);
   }
 
   return lines.join('\n');
 }
+
 
 
 export const manageRoutes = new Hono();
@@ -88,7 +88,7 @@ manageRoutes.get('/schedule-post', async (c) => {
     grouped[row.type].push(row.user);
   }
 
-  const text = formatScheduleMessage(today, grouped);
+  const text = buildScheduleText(today, grouped);
 
   try {
     await fetch('https://slack.com/api/chat.postMessage', {
