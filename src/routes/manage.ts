@@ -70,7 +70,7 @@ manageRoutes.get('/schedule', async (c) => {
 });
 
 manageRoutes.get('/schedule-post', async (c) => {
-  const today = dayjs().format('YYYY-MM-DD');
+  const today = c.req.query('today') || dayjs().format('YYYY-MM-DD');
 
   // 특정 날짜 조회
   const results = await db
