@@ -22,7 +22,7 @@ function buildScheduleText(date: string, grouped: Record<string, string[]>): str
   const lines = [`📅 *${date} 일정 공유*`];
 
   for (const { type, emoji } of SCHEDULE_TYPES) {
-    const names = grouped[type]?.length ? grouped[type].join(', ') : '-';
+    const names = grouped[type]?.length ? grouped[type].join(', ') : '없음';
     lines.push(`${emoji} *${type}*: ${names}`);
   }
 
