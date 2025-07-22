@@ -31,7 +31,7 @@ export async function showScheduleModal(trigger_id: string) {
           type: "input",
           block_id: "end_block",
           optional: true,
-          label: { type: "plain_text", text: "종료일 (하루면 생략)" },
+          label: { type: "plain_text", text: "종료일" },
           element: {
             type: "datepicker",
             action_id: "end_date",
@@ -60,7 +60,7 @@ export async function showScheduleModal(trigger_id: string) {
           type: 'input',
           block_id: 'reason_block',
           optional: true,
-          label: { type: 'plain_text', text: '사유(옵션)' },
+          label: { type: 'plain_text', text: '사유' },
           element: {
             type: 'plain_text_input',
             action_id: 'reason_input',
