@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
 
 import { db } from '../db/db';
+import { schedules } from '../db/schema';
 
 export const manageRoutes = new Hono();
 
