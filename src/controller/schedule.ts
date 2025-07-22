@@ -55,6 +55,17 @@ export async function showScheduleModal(trigger_id: string) {
               { text: { type: "plain_text", text: "출장" }, value: "출장" },
             ],
           },
+        },,
+        {
+          type: 'input',
+          block_id: 'reason_block',
+          optional: true,
+          label: { type: 'plain_text', text: '장애 내용' },
+          element: {
+            type: 'plain_text_input',
+            action_id: 'reason_input',
+            multiline: true,
+          },
         },
       ],
     },
@@ -77,6 +88,7 @@ export async function postScheduleMessage(payload: any) {
   const startDate = state.start_block.start_date.selected_date;
   const endDate = state.end_block?.end_date?.selected_date || startDate;
   const type = state.type_block.schedule_type.selected_option.value;
+  const reason = state.reason_block?.reason_input?.value || '';
 
   // 날짜 포맷
   const dateText =
@@ -86,13 +98,16 @@ export async function postScheduleMessage(payload: any) {
   const text = `📅 *일정 등록*
 • 등록자: <@${userId}>
 • 일정: ${dateText}
-• 종류: ${type}`;
+• 종류: ${type} ${reason ? `
+• 사유: ${reason}` : ''}
+`;
 
   const rows = getDateRange(startDate, endDate).map((date) => ({
     id: uuidv4(),
     userId,
     date,
     type,
+    reason,
   }));
 
   await db.insert(schedules).values(rows);
