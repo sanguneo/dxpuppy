@@ -31,7 +31,7 @@ manageRoutes.get('/schedule', async (c) => {
       if (!grouped[row.type]) {
         grouped[row.type] = [];
       }
-      grouped[row.type].push(row.name);
+      grouped[row.type].push(row.user);
     }
 
     return c.json(grouped);
