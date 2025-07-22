@@ -7,6 +7,7 @@ import { getDateRange } from '../util/date';
 const SLACK_TOKEN = process.env.SLACK_BOT_TOKEN!;
 const SLACK_CHANNEL = process.env.SLACK_SCHEDULECHANNEL_ID!;
 
+
 export async function showScheduleModal(trigger_id: string) {
   const modal = {
     trigger_id,
