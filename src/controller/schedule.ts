@@ -89,18 +89,13 @@ export async function postScheduleMessage(payload: any) {
   const type = state.type_block.schedule_type.selected_option.value;
   const reason = state.reason_block?.reason_input?.value || '';
 
-  let user = payload.user.username;
-  if (!user) {
-    const userInfo = await fetch(`https://slack.com/api/users.info?user=${userId}`, {
-      headers: {
-        Authorization: `Bearer ${process.env.SLACK_BOT_TOKEN}`,
-      },
-    }).then(res => res.json());
+  const userInfo = await fetch(`https://slack.com/api/users.info?user=${userId}`, {
+    headers: {
+      Authorization: `Bearer ${process.env.SLACK_BOT_TOKEN}`,
+    },
+  }).then(res => res.json()).catch(()=>({}));
 
-    user = userInfo?.user?.profile?.display_name || userInfo?.user?.real_name;
-  }
-  //
-
+  const user = userInfo?.user?.profile?.display_name || userInfo?.user?.real_name || `<@${userId}>`;
 
   // 날짜 포맷
   const dateText =
