@@ -89,13 +89,26 @@ export async function postScheduleMessage(payload: any) {
   const type = state.type_block.schedule_type.selected_option.value;
   const reason = state.reason_block?.reason_input?.value || '';
 
+  let user = payload.user.username;
+  if (!user) {
+    const userInfo = await fetch(`https://slack.com/api/users.info?user=${userId}`, {
+      headers: {
+        Authorization: `Bearer ${process.env.SLACK_BOT_TOKEN}`,
+      },
+    }).then(res => res.json());
+
+    user = userInfo?.user?.profile?.display_name || userInfo?.user?.real_name;
+  }
+  //
+
+
   // 날짜 포맷
   const dateText =
     startDate === endDate ? startDate : `${startDate} ~ ${endDate}`;
 
   // 메시지 구성
   const text = `📅 *일정 등록*
-• 등록자: <@${userId}>
+• 등록자: ${user}
 • 일정: ${dateText}
 • 종류: ${type} ${reason ? `
 • 사유: ${reason}` : ''}
@@ -103,7 +116,7 @@ export async function postScheduleMessage(payload: any) {
 
   const rows = getDateRange(startDate, endDate).map((date) => ({
     id: uuidv4(),
-    userId,
+    user,
     date,
     type,
     reason,
