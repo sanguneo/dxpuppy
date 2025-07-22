@@ -55,7 +55,7 @@ export async function showScheduleModal(trigger_id: string) {
               { text: { type: "plain_text", text: "출장" }, value: "출장" },
             ],
           },
-        },,
+        },
         {
           type: 'input',
           block_id: 'reason_block',
