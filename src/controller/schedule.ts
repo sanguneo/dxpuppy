@@ -60,11 +60,10 @@ export async function showScheduleModal(trigger_id: string) {
           type: 'input',
           block_id: 'reason_block',
           optional: true,
-          label: { type: 'plain_text', text: '장애 내용' },
+          label: { type: 'plain_text', text: '사유(옵션)' },
           element: {
             type: 'plain_text_input',
             action_id: 'reason_input',
-            multiline: true,
           },
         },
       ],
