@@ -80,7 +80,7 @@ manageRoutes.get('/schedule-post', async (c) => {
 
   // 타입별로 그룹화
   const grouped: Record<string, string[]> = {};
-  if (!results.length) return c.text('no results');
+
   for (const row of results) {
     if (!grouped[row.type]) {
       grouped[row.type] = [];
