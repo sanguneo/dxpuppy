@@ -83,15 +83,15 @@ export async function showIncidentModal(trigger_id: string) {
 export async function postIncidentMessage(payload: any) {
   const values = payload.view.state.values;
   const userId = payload.user.id;
-  // const username = payload.user.username;
-  //
-  // const userInfo = await fetch(`https://slack.com/api/users.info?user=${userId}`, {
-  //   headers: {
-  //     Authorization: `Bearer ${process.env.SLACK_BOT_TOKEN}`,
-  //   },
-  // }).then(res => res.json());
-  //
-  // const displayName = userInfo?.user?.profile?.display_name || userInfo?.user?.real_name || username;
+  const username = payload.user.username;
+
+  const userInfo = await fetch(`https://slack.com/api/users.info?user=${userId}`, {
+    headers: {
+      Authorization: `Bearer ${process.env.SLACK_BOT_TOKEN}`,
+    },
+  }).then(res => res.json());
+
+  const displayName = userInfo?.user?.profile?.display_name || userInfo?.user?.real_name || username;
 
   const tier = values.tier_block.tier_select.selected_option.text.text;
   const service = values.service_block.service_select.selected_option.text.text;
@@ -111,16 +111,35 @@ ${description}
 <!channel>
 `;
 
-
-  await fetch('https://slack.com/api/chat.postMessage', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${SLACK_TOKEN}`,
-      'Content-Type': 'application/json',
-    },
+  await fetch('https://national-dodo-highly.ngrok-free.app/mailer', {
+    method: 'post',
     body: JSON.stringify({
-      channel: SLACK_CHANNEL,
-      text,
-    }),
-  });
+      from: "dxfe@aegisep.com",
+      to: "\"나상권\" <sknah@aegisep.com>, \"이순리\" <srlee@aegisep.com>, \"송하람\" <haramsong@aegisep.com>, \"배영배\" <endless@aegisep.com>",
+      subject: `🚨 ${tier} 장애 발생 : ${service}서비스`, // 제목
+      html: `<div>
+  <ul>
+    <li><div style="font-weight: bold;">등록자</div><div>${displayName}</div></li>
+    <li><div style="font-weight: bold;">등급</div><div>${tier}</div></li>
+    <li><div style="font-weight: bold;">서비스</div><div>${service}</div></li>
+    <li><div style="font-weight: bold;">발생 일시</div><div>${date} ${time}</div></li>
+    <li><div style="font-weight: bold;">내용</div></li>
+    <li><pre style="padding-left: 15px;">${description}</pre></li>
+  </ul>
+ </div>`,
+    })
+  })
+
+  //
+  // await fetch('https://slack.com/api/chat.postMessage', {
+  //   method: 'POST',
+  //   headers: {
+  //     Authorization: `Bearer ${SLACK_TOKEN}`,
+  //     'Content-Type': 'application/json',
+  //   },
+  //   body: JSON.stringify({
+  //     channel: SLACK_CHANNEL,
+  //     text,
+  //   }),
+  // });
 }
