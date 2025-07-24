@@ -117,16 +117,35 @@ ${description}
       from: "dxfe@aegisep.com",
       to: "\"나상권\" <sknah@aegisep.com>, \"이순리\" <srlee@aegisep.com>, \"송하람\" <haramsong@aegisep.com>, \"배영배\" <endless@aegisep.com>",
       subject: `🚨 ${tier} 장애 발생 : ${service}서비스`, // 제목
-      html: `<div>
-  <ul>
-    <li><div style="font-weight: bold;">등록자</div><div>${displayName}</div></li>
-    <li><div style="font-weight: bold;">등급</div><div>${tier}</div></li>
-    <li><div style="font-weight: bold;">서비스</div><div>${service}</div></li>
-    <li><div style="font-weight: bold;">발생 일시</div><div>${date} ${time}</div></li>
-    <li><div style="font-weight: bold;">내용</div></li>
-    <li><pre style="padding-left: 15px;">${description}</pre></li>
-  </ul>
- </div>`,
+      html: `<div style="font-family: Arial, sans-serif; max-width: 600px; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+  <h2 style="color: #d32f2f;">🚨 장애 알림</h2>
+  <table style="width: 100%; border-collapse: collapse; margin-top: 16px;">
+    <tr>
+      <td style="font-weight: bold; padding: 8px 0; width: 120px;">등록자</td>
+      <td style="padding: 8px 0;">${displayName}</td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold; padding: 8px 0;">등급</td>
+      <td style="padding: 8px 0;">${tier}</td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold; padding: 8px 0;">서비스</td>
+      <td style="padding: 8px 0;">${service}</td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold; padding: 8px 0;">발생 일시</td>
+      <td style="padding: 8px 0;">${date} ${time}</td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold; padding: 8px 0; vertical-align: top;">내용</td>
+      <td style="padding: 8px 0;">
+        <pre style="background: #f5f5f5; padding: 12px; border-radius: 4px; font-size: 14px; line-height: 1.5;">${description}</pre>
+      </td>
+    </tr>
+  </table>
+  <p style="margin-top: 24px; color: #555; font-size: 12px;">본 메일은 시스템에 의해 자동 발송되었습니다.</p>
+</div>
+`,
     })
   })
 
